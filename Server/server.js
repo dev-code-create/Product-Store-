@@ -1,77 +1,18 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
-import Product from "./Models/product.model.js";
+import productRoutes from "./routes/product.route.js";
 
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.get("/api/products", async (req, res) => {
-  try {
-    const products = await Product.findById({});
-    res.status(200).jsom({ success: true, data: products });
-  } catch (error) {
-    console.error("Error in getting products", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
-app.post("/api/products", async (req, res) => {
-  const product = req.body;
-  if (!product.name || !product.price || !product.image) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please provide all the fields" });
-  }
-
-  const newProduct = new Product(product);
-
-  try {
-    await newProduct.save();
-    res.status(201).json({ sucess: true, data: newProduct });
-  } catch (error) {
-    console.error("Error in create project", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
-
-app.put("/api/products/:id", async (req, res) => {
-  const { id } = req.params;
-  const product = req.body;
-
-  if (!mongooose.Types.ObjectId.isValid(id)) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Invalid ProductId" });
-  }
-
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(id, product, {
-      new: true,
-    });
-    res.status(201).json({ sucess: true, data: updatedProduct });
-  } catch (error) {
-    console.error("Error in Updating the product", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
-
-app.delete("/api/products/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    await Product.findByIdAndDelete(id);
-    res
-      .status(200)
-      .json({ success: true, message: "Product deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
+app.use("/api/products", productRoutes);
 
 app.listen(5000, () => {
   connectDB();
-  console.log("Server listening on port 5000 ");
+  console.log("Server listening on http://localhost:" + PORT);
 });
