@@ -9,6 +9,15 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.findById({});
+    res.status(200).jsom({ success: true, data: products });
+  } catch (error) {
+    console.error("Error in getting products", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
 app.post("/api/products", async (req, res) => {
   const product = req.body;
   if (!product.name || !product.price || !product.image) {
