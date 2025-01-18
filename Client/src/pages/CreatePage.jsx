@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useProductStore } from "../store/product";
+import { useProductStore } from "../Store/product.store";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({

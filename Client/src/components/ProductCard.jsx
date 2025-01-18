@@ -20,8 +20,9 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useProductStore } from "../store/product";
+
 import { useState } from "react";
+import { useProductStore } from "../Store/product.store";
 
 const ProductCard = ({ product }) => {
   const [updatedProduct, setUpdatedProduct] = useState(product);
